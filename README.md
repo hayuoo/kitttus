@@ -1,11 +1,22 @@
-# Kitttus Enterprise Scaffold
+# Kitttus Expo Supply Chain Platform
 
-这是一个**前后端分离**的企业级脚手架：后端基于 **Spring Cloud**，前端基于 **React + TypeScript**。
+企业级前后端分离项目：基于 Spring Cloud + React 构建 **智能会展供应链中台**。
+
+## 关键特性
+- 多租户：主办方 / 供应商 / 参展商
+- 闭环链路：订单 + 合同 + 验收 + 结算
+- 风险控制：超预算预警、延迟预警
+- 强 RBAC + 审批流入口
 
 ## 项目结构
-- `backend/`：Spring Cloud 多模块项目（网关、认证、用户、安全公共模块）
+- `backend/`：Spring Cloud 多模块
+  - `auth-service`
+  - `gateway-service`
+  - `user-service`
+  - `supplychain-service`
+  - `common-security`
 - `frontend/`：React 管理控制台
-- `docs/architecture.md`：架构与安全策略说明
+- `docs/architecture.md`：架构与安全策略
 
 ## 快速开始
 ### 后端
@@ -13,11 +24,11 @@
 cd backend
 mvn clean package
 ```
-
-启动顺序：
-1. `gateway-service` (8080)
-2. `auth-service` (8081)
-3. `user-service` (8082)
+启动建议顺序：
+1. `auth-service` (8081)
+2. `user-service` (8082)
+3. `supplychain-service` (8083)
+4. `gateway-service` (8080)
 
 ### 前端
 ```bash
@@ -26,8 +37,9 @@ npm install
 npm run dev
 ```
 
-默认测试账号：
-- username: `admin`
-- password: `ChangeMe123!`
+## 示例账号
+- 主办方审批人：`organizer.admin / ChangeMe123!`
+- 供应商经理：`supplier.pm / ChangeMe123!`
+- 参展商负责人：`exhibitor.owner / ChangeMe123!`
 
-> 登录后，前端通过网关访问 `/api/users/me` 验证鉴权链路。
+默认租户：`expo-org-001`

@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
@@ -26,10 +27,16 @@ public class JwtTokenProvider {
     }
 
     public String createToken(String subject, Collection<String> roles) {
+        return createToken(subject, roles, Map.of());
+    }
+
+    public String createToken(String subject, Collection<String> roles, Map<String, Object> extraClaims) {
         Instant now = Instant.now();
+        Map<String, Object> claims = new HashMap<>(extraClaims);
+        claims.put("roles", roles);
         return Jwts.builder()
                 .subject(subject)
-                .claims(Map.of("roles", roles))
+                .claims(claims)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusSeconds(expirationSeconds)))
                 .signWith(signingKey)

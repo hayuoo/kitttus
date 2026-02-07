@@ -1,0 +1,11 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: supplychain-service
+
+security:
+  jwt:
+    secret: U3ByaW5nQ2xvdWRTZWNyZXRLZXlTdHJvbmdGb3JCdXNpbmVzcw==
+    expiration-seconds: 900

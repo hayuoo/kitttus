@@ -4,7 +4,7 @@ import { useAuth } from '../auth/AuthContext';
 
 export const LoginPage = () => {
   const { login } = useAuth();
-  const [username, setUsername] = useState('admin');
+  const [username, setUsername] = useState('organizer.admin');
   const [password, setPassword] = useState('ChangeMe123!');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -23,8 +23,8 @@ export const LoginPage = () => {
   return (
     <div className="container">
       <div className="card" style={{ maxWidth: 420, margin: '0 auto' }}>
-        <h1>Kitttus 企业控制台</h1>
-        <p>安全认证入口（JWT + 网关鉴权）</p>
+        <h1>Kitttus 会展供应链控制台</h1>
+        <p>多租户 + RBAC + 审批流安全入口</p>
         <form onSubmit={onSubmit}>
           <input className="input" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="用户名" />
           <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="密码" />

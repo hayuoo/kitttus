@@ -1,21 +1,29 @@
-# Kitttus Spring Cloud + React 企业级脚手架
+# Kitttus 智能会展供应链中台（Spring Cloud + React）
 
-## 架构概览
-- **gateway-service**：统一入口，路由转发、跨域与统一访问控制。
-- **auth-service**：认证服务，负责登录与 JWT 签发。
-- **user-service**：业务服务示例，提供 `/api/users/me` 受保护接口。
-- **common-security**：安全共享组件，包含密码加密与 JWT 解析/签发。
-- **frontend (React + TypeScript)**：前后端分离控制台，具备登录态、路由守卫、请求鉴权拦截器。
+## 业务目标
+服务展会主办方、供应商、参展商，覆盖 **展位搭建、物料采购、现场履约** 的全流程协作。
 
-## 安全机制
-1. `BCrypt(12)` 对密码进行强散列。
-2. JWT 使用 HMAC-SHA 算法，带过期时间与角色声明。
-3. 网关与业务服务双层校验，防止单点绕过。
-4. 前端通过 Axios 拦截器统一注入 Bearer Token。
-5. 仅开放最小接口面：`/api/auth/login` 与健康检查。
+## 核心能力
+- **多租户隔离**：通过 JWT `tenantIds` + `X-Tenant-Id` 请求头联合校验。
+- **闭环流程**：订单创建 → 审批 → 合同签署 → 验收 → 结算。
+- **风险控制**：超预算预警、延迟预警。
+- **RBAC + 审批流**：角色控制 + 审批节点权限控制。
 
-## 演进建议（商业化）
-- 引入 Redis 管理会话黑名单与刷新令牌。
-- 引入 Spring Authorization Server / Keycloak 实现 OIDC 与 SSO。
-- 使用 Nacos/Consul + Config Server 实现服务治理与密钥外置。
-- 接入审计日志、行为风控、MFA、多租户 RBAC。
+## 后端模块
+- `auth-service`：统一认证与令牌签发（包含角色、权限、租户上下文）。
+- `gateway-service`：统一入口、路由聚合、跨域策略。
+- `user-service`：用户基础信息服务。
+- `supplychain-service`：供应链中台核心业务流程服务。
+- `common-security`：JWT 与加密组件。
+
+## 安全策略
+1. 密码强散列：`BCrypt(12)`。
+2. JWT 最小信任：角色、权限、租户信息写入 Token。
+3. 网关与业务服务双层鉴权。
+4. 关键接口最小授权（审批接口仅 `APPROVER` 可访问）。
+
+## 商业化演进
+- 审批流引擎对接（Flowable/Camunda）。
+- 合同与结算接入电子签章、发票、对账系统。
+- 风险模型接入事件流与机器学习评分。
+- 多组织层级 + 数据权限（行级隔离）增强。

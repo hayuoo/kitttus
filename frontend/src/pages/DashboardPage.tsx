@@ -1,14 +1,8 @@
-import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { httpClient } from '../api/httpClient';
 
 export const DashboardPage = () => {
-  const { username, roles, logout } = useAuth();
-  const [profile, setProfile] = useState<{ username: string; status: string } | null>(null);
-
-  useEffect(() => {
-    httpClient.get('/users/me').then(({ data }) => setProfile(data));
-  }, []);
+  const { username, roles, permissions, tenantIds, activeTenantId, switchTenant, logout } = useAuth();
 
   return (
     <div className="container">
@@ -18,7 +12,17 @@ export const DashboardPage = () => {
           <button className="btn" onClick={logout}>退出登录</button>
         </div>
         <p>当前角色：{roles.join(', ')}</p>
-        <p>网关鉴权状态：{profile ? `在线(${profile.status})` : '加载中...'}</p>
+        <p>权限集：{permissions.join(', ')}</p>
+        <label>当前租户：</label>
+        <select className="input" value={activeTenantId ?? ''} onChange={(e) => switchTenant(e.target.value)}>
+          {tenantIds.map((tenantId) => (
+            <option key={tenantId} value={tenantId}>{tenantId}</option>
+          ))}
+        </select>
+        <p>业务入口：</p>
+        <Link to="/supplychain" className="btn" style={{ textDecoration: 'none', display: 'inline-block' }}>
+          进入会展供应链中台
+        </Link>
       </div>
     </div>
   );

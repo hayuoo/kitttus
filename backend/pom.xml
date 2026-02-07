@@ -11,6 +11,7 @@
         <module>auth-service</module>
         <module>user-service</module>
         <module>gateway-service</module>
+        <module>supplychain-service</module>
     </modules>
 
     <properties>
